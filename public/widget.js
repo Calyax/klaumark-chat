@@ -222,7 +222,8 @@
   // 6. State
   // ─────────────────────────────────────────────────────────────────────────────
   var messages = [];         // { role: 'user'|'assistant', content: string }
-  var detectedLang = 'pl';   // default PL; set on first user send
+  // Init lang from <html lang> — updates on first user message too
+  var detectedLang = (document.documentElement.lang || 'pl').startsWith('en') ? 'en' : 'pl';
   var isOpen = false;
   var isStreaming = false;
   var firstMessageSent = false;
@@ -669,5 +670,27 @@
   // 21. Initial placeholder
   // ─────────────────────────────────────────────────────────────────────────────
   setInputPlaceholder();
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 22. Livewire SPA navigation — re-detect language on wire:navigate page change
+  // ─────────────────────────────────────────────────────────────────────────────
+  document.addEventListener('livewire:navigated', function () {
+    var newLang = (document.documentElement.lang || 'pl').startsWith('en') ? 'en' : 'pl';
+    if (newLang !== detectedLang) {
+      detectedLang = newLang;
+      setInputPlaceholder();
+      // If widget is closed and not yet opened, reset greeting so next open uses new lang
+      if (!isOpen && messages.length === 0) return;
+      // If open and no messages yet, re-render greeting in new language
+      if (isOpen && messages.length <= 1) {
+        messagesEl.innerHTML = '';
+        messages = [];
+        var greeting = GREETINGS[detectedLang] || GREETINGS.pl;
+        appendBotMessageEl(greeting);
+        messages.push({ role: 'assistant', content: greeting });
+        renderQuickReplies(INITIAL_REPLIES[detectedLang] || INITIAL_REPLIES.pl);
+      }
+    }
+  });
 
 })();
