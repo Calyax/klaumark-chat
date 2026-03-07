@@ -53,7 +53,17 @@
     '  transition: transform 0.18s ease, box-shadow 0.18s ease;',
     '}',
     '#klaudio-launcher:hover { transform: scale(1.08); box-shadow: 0 6px 22px rgba(0,82,228,0.55); }',
-    '#klaudio-launcher svg { width: 28px; height: 28px; }',
+    '#klaudio-launcher svg { width: 30px; height: 30px; }',
+    '@keyframes klaudio-ring { 0% { transform:scale(1); opacity:0.6; } 100% { transform:scale(1.65); opacity:0; } }',
+    '#klaudio-launcher::after {',
+    '  content:""; position:absolute; inset:0; border-radius:50%;',
+    '  border: 2px solid ' + BRAND_BLUE + ';',
+    '  animation: klaudio-ring 2s ease-out infinite;',
+    '}',
+    '@keyframes klaudio-wifi { 0%,100% { opacity:1; } 50% { opacity:0.35; } }',
+    '#klaudio-launcher .w1 { animation: klaudio-wifi 2s ease-in-out infinite; }',
+    '#klaudio-launcher .w2 { animation: klaudio-wifi 2s ease-in-out infinite 0.3s; }',
+    '#klaudio-launcher .w3 { animation: klaudio-wifi 2s ease-in-out infinite 0.6s; }',
 
     /* Chat panel */
     '#klaudio-panel {',
@@ -183,10 +193,17 @@
   var HTML = [
     '<div id="klaudio">',
 
-    /* Launcher */
+    /* Launcher — smart home house + animated wifi arcs */
     '  <button id="klaudio-launcher" aria-label="Open Klaudio chat">',
-    '    <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">',
-    '      <text x="4" y="18" font-size="16" font-weight="bold" font-family="sans-serif">K</text>',
+    '    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">',
+    '      <!-- House body -->',
+    '      <path d="M3 10.5L12 3l9 7.5V21a1 1 0 01-1 1H4a1 1 0 01-1-1V10.5z" fill="white" opacity="0.95"/>',
+    '      <!-- Door -->',
+    '      <rect x="9" y="14" width="6" height="8" rx="1" fill="#0052E4"/>',
+    '      <!-- Wifi arcs inside house roof area -->',
+    '      <circle class="w1" cx="12" cy="11" r="1" fill="#0052E4"/>',
+    '      <path class="w2" d="M9.5 9.5a3.5 3.5 0 015 0" stroke="#0052E4" stroke-width="1.2" stroke-linecap="round" fill="none"/>',
+    '      <path class="w3" d="M7.5 7.8a6 6 0 019 0" stroke="#0052E4" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.6"/>',
     '    </svg>',
     '  </button>',
 
