@@ -418,20 +418,13 @@
         return reader.read().then(function (result) {
           if (result.done) return;
 
-          buffer += decoder.decode(result.value, { stream: true });
-
-          // Parse SSE lines — toTextStreamResponse sends "data: <text>\n\n"
-          var lines = buffer.split('\n');
-          buffer = lines.pop() || '';
-
-          lines.forEach(function (line) {
-            if (!line.startsWith('data: ')) return;
-            var chunk = line.slice(6); // remove "data: " prefix
-            if (chunk === '[DONE]' || chunk.trim() === '') return;
+          // toTextStreamResponse (AI SDK v6) streams plain text — no SSE prefix
+          var chunk = decoder.decode(result.value, { stream: true });
+          if (chunk) {
             botContent += chunk;
             botMsgEl.innerHTML = renderMarkdown(botContent);
             scrollToBottom();
-          });
+          }
 
           return pump();
         });
