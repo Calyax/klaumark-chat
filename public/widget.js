@@ -8,8 +8,15 @@
   'use strict';
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // 1. Guard — prevent double-init
+  // 1. Guard — prevent double-init; reset on Livewire SPA navigation
+  // wire:navigate causes script re-execution without a full page reload,
+  // so we reset the flag before navigation so the widget reinitialises with
+  // the new page's language.
   // ─────────────────────────────────────────────────────────────────────────────
+  document.addEventListener('livewire:navigate', function () {
+    window.__klaudioLoaded = false;
+  }, { once: false });
+
   if (window.__klaudioLoaded) return;
   window.__klaudioLoaded = true;
 
@@ -671,26 +678,7 @@
   // ─────────────────────────────────────────────────────────────────────────────
   setInputPlaceholder();
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // 22. Livewire SPA navigation — re-detect language on wire:navigate page change
-  // ─────────────────────────────────────────────────────────────────────────────
-  document.addEventListener('livewire:navigated', function () {
-    var newLang = (document.documentElement.lang || 'pl').startsWith('en') ? 'en' : 'pl';
-    if (newLang !== detectedLang) {
-      detectedLang = newLang;
-      setInputPlaceholder();
-      // If widget is closed and not yet opened, reset greeting so next open uses new lang
-      if (!isOpen && messages.length === 0) return;
-      // If open and no messages yet, re-render greeting in new language
-      if (isOpen && messages.length <= 1) {
-        messagesEl.innerHTML = '';
-        messages = [];
-        var greeting = GREETINGS[detectedLang] || GREETINGS.pl;
-        appendBotMessageEl(greeting);
-        messages.push({ role: 'assistant', content: greeting });
-        renderQuickReplies(INITIAL_REPLIES[detectedLang] || INITIAL_REPLIES.pl);
-      }
-    }
-  });
+  // Note: Livewire SPA navigation is handled by resetting __klaudioLoaded
+  // on 'livewire:navigate' (see guard at top), which causes full reinit.
 
 })();
