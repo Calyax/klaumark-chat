@@ -1,5 +1,5 @@
 import { anthropic } from '@ai-sdk/anthropic';
-import { streamText, tool, zodSchema } from 'ai';
+import { streamText, tool, zodSchema, stepCountIs } from 'ai';
 import { z } from 'zod';
 import { NextRequest } from 'next/server';
 import { findRelevantContent } from '@/lib/upstash';
@@ -122,12 +122,14 @@ export async function POST(req: NextRequest) {
   };
 
   // AI SDK v6: maxOutputTokens replaces maxTokens
+  // maxSteps: model can call a tool (step 1) then generate text response (step 2)
   const result = streamText({
     model: anthropic('claude-haiku-4-5'),
     system: buildSystemPrompt(context, lang),
     messages: messages as any,
     maxOutputTokens: 400,
     tools,
+    stopWhen: stepCountIs(5),
   });
 
   // AI SDK v6: toTextStreamResponse() replaces toDataStreamResponse()
