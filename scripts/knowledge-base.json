@@ -1,0 +1,290 @@
+[
+  {
+    "id": "pkg-en-eco",
+    "lang": "en",
+    "topic": "packages",
+    "text": "Package: ECO - Studio, 1 or 2 bedroom apartment\nService price: 850 zł (includes design, remote configuration and online training)\nDevices price: approx. 1800 zł (includes smart bulbs, smart outlets, Wi-Fi thermostat)\nWhat's included:\n- Smart bulbs or wall switches: 7\n- Smart sockets with energy monitoring: 4\n- Wi-Fi Smart Thermostat: 2\n- Air Conditioner integration\n- Design + remote configuration\n- Online training\nAdd-ons:\n- Migration to Home Assistant: 600 zł\n- Remote support: 49 zł/month\n- Additional device setup: 50 zł\nDescription: Perfect starter package for efficient home automation."
+  },
+  {
+    "id": "pkg-en-safe-home",
+    "lang": "en",
+    "topic": "packages",
+    "text": "Package: SAFE HOME - Security and monitoring (bestseller)\nService price: 1750 zł (includes design, remote configuration and online training)\nDevices price: approx. 3750 zł (includes smart bulbs, smart outlets, Wi-Fi thermostat)\nWhat's included:\n- All devices and services included in the Eco package\n- Smart lock + video doorbell: 1\n- Smoke and water leak sensor: 1\n- Door and window sensor: 1\n- Motion sensor: 1\n- Temperature and humidity sensor: 1\n- Indoor camera: 1\nAdd-ons:\n- Migration to Home Assistant: 850 zł\n- Remote support: 69 zł/month\n- Additional device setup: 50 zł\nDescription: Complete security solution with smart locks and monitoring."
+  },
+  {
+    "id": "pkg-en-komfort",
+    "lang": "en",
+    "topic": "packages",
+    "text": "Package: KOMFORT - Full home automation 70-150 m²\nService price: 3499 zł (includes design, installation, configuration, audit and on-site training)\nDevices price: approx. 8570 zł\nWhat's included:\n- All devices and services included in the Eco and Safe Home packages\n- Additional smart bulbs: 10\n- Additional smart sockets: 10\n- Additional door and window sensors: 4\n- Additional motion sensors: 3\n- Additional temperature and humidity sensors: 2\n- Outdoor camera: 1\n- Intelligent blinds or curtain motors: 1\n- Any compatible smart device addition: 5\nAdd-ons:\n- Migration to Home Assistant: 1000 zł\n- Remote support: 69 zł/month\nDescription: Full automation for larger homes with professional installation."
+  },
+  {
+    "id": "pkg-pl-eco",
+    "lang": "pl",
+    "topic": "packages",
+    "text": "Pakiet: ECO - Kawalerka, 1 lub 2 pokojowe mieszkanie\nCena usługi: 850 zł (obejmuje projekt, zdalną konfigurację i szkolenie on-line)\nPrzybliżona cena urządzeń: 1800 zł\nCo zawiera:\n- Inteligentne żarówki lub przełączniki ścienne: 7\n- Smart gniazdka z pomiarem energii: 4\n- Termostat WI-FI: 2\n- Projekt + zdalna konfiguracja\n- Integracja klimatyzacji\n- Szkolenie on-line\nDodatki:\n- Migracja do Home Assistant: 600 zł\n- Zdalne wsparcie: 49 zł/miesiąc\n- Dodatkowa konfiguracja nowego urządzenia: 50 zł\nOpis: Twój dom reaguje na krótkie komendy wypowiedziane do HomePoda, głośnika Echo lub Google Nest."
+  },
+  {
+    "id": "pkg-pl-safe-home",
+    "lang": "pl",
+    "topic": "packages",
+    "text": "Pakiet: SAFE HOME - Bezpieczeństwo i monitoring (bestseller)\nCena usługi: 1750 zł (obejmuje projekt, zdalną konfigurację i szkolenie on-line)\nPrzybliżona cena urządzeń: 3750 zł (obejmuje inteligentne żarówki, smart gniazdka, termostat Wi-Fi)\nCo zawiera:\n- Wszystkie urządzenia i usługi z pakietu ECO\n- Smart zamek + wideodzwonek: 1\n- Czujniki dymu i zalania: 1\n- Czujnik drzwi i okien: 1\n- Czujnik ruchu: 1\n- Czujnik temperatury oraz wilgotności: 1\n- Kamera wewnętrzna: 1\nDodatki:\n- Migracja do Home Assistant: 850 zł\n- Zdalne wsparcie: 69 zł/miesiąc\n- Dodatkowa konfiguracja nowego urządzenia: 50 zł\nOpis: Twój dom reaguje na krótkie komendy wypowiedziane do HomePoda, głośnika Echo lub Google Nest."
+  },
+  {
+    "id": "pkg-pl-komfort",
+    "lang": "pl",
+    "topic": "packages",
+    "text": "Pakiet: KOMFORT - Pełna automatyzacja domu 70-150 m²\nCena usługi: 3499 zł (obejmuje projekt, montaż, konfigurację, audyt i szkolenie na miejscu)\nPrzybliżona cena urządzeń: 8570 zł (obejmuje inteligentne żarówki, smart gniazdka, termostat Wi-Fi)\nCo zawiera:\n- Wszystkie urządzenia oraz usługi pakietu Eco oraz Safe Home\n- Dodatkowe inteligentne żarówki: 10\n- Dodatkowe smart gniazdka: 10\n- Dodatkowe czujniki drzwi i okien: 4\n- Dodatkowe czujniki ruchu: 3\n- Dodatkowe czujniki temperatury i wilgotności: 2\n- Kamera zewnętrzna: 1\n- Inteligentny karnisz: 1\n- Dowolne kompatybilne urządzenie inteligentne: 5\nDodatki:\n- Migracja do Home Assistant: 1000 zł\n- Zdalne wsparcie: 69 zł/miesiąc\nOpis: Twój dom reaguje na krótkie komendy wypowiedziane do HomePoda, głośnika Echo lub Google Nest."
+  },
+  {
+    "id": "faq-en-1",
+    "lang": "en",
+    "topic": "faq",
+    "text": "Question: Do I need to tear down walls or replace my electrical wiring?\nAnswer: No. We use wireless technologies (Zigbee, Wi-Fi 6/7, Thread). Most devices are plug-in or mounted with 3M tape. No renovation needed."
+  },
+  {
+    "id": "faq-en-2",
+    "lang": "en",
+    "topic": "faq",
+    "text": "Question: How much does it really cost, including devices?\nAnswer: Depending on the package: from approx. 2,000 PLN (ECO Start) to 15,000 PLN (COMFORT Plus), devices included. We quote the service upfront, and you buy the hardware at cost."
+  },
+  {
+    "id": "faq-en-3",
+    "lang": "en",
+    "topic": "faq",
+    "text": "Question: Which ecosystem to choose: Apple, Alexa or Google?\nAnswer: During a free consultation, we check what devices you already use and your priorities (e.g., savings, price, security). Then we recommend the best system — or a hybrid."
+  },
+  {
+    "id": "faq-en-4",
+    "lang": "en",
+    "topic": "faq",
+    "text": "Question: Can I control the system away from home Wi-Fi?\nAnswer: Yes. All three platforms support remote access over mobile networks. Home Assistant can also use secure Nabu Casa cloud."
+  },
+  {
+    "id": "faq-en-5",
+    "lang": "en",
+    "topic": "faq",
+    "text": "Question: What happens if internet or power goes down?\nAnswer: Local control (buttons, HomeKit Thread, Zigbee) continues to function. Once the connection is restored, automations resume automatically. We can also install backup power (UPS) on request."
+  },
+  {
+    "id": "faq-en-6",
+    "lang": "en",
+    "topic": "faq",
+    "text": "Question: Will a smart home increase my electricity bills?\nAnswer: Quite the opposite — smart lighting and heating typically reduce energy use by 10–21%. Most devices in standby draw less than 1W. We also support PoE where Ethernet is pre-installed."
+  },
+  {
+    "id": "faq-en-7",
+    "lang": "en",
+    "topic": "faq",
+    "text": "Question: How are my data and camera recordings protected?\nAnswer: We choose equipment with end-to-end encryption. We do not collect marketing data. Logs are stored either locally or in the manufacturer's cloud — it's up to you."
+  },
+  {
+    "id": "faq-en-8",
+    "lang": "en",
+    "topic": "faq",
+    "text": "Question: I already have IKEA bulbs / TP-Link plugs. Can they be integrated?\nAnswer: Yes. We can integrate existing devices if they're compatible with your hub. If not, we'll suggest an affordable alternative."
+  },
+  {
+    "id": "faq-en-9",
+    "lang": "en",
+    "topic": "faq",
+    "text": "Question: How long does installation and setup take?\nAnswer: ECO Start is usually completed in couple of working days. More complex installations (COMFORT Plus) take only few days longer including testing and training."
+  },
+  {
+    "id": "faq-pl-1",
+    "lang": "pl",
+    "topic": "faq",
+    "text": "Pytanie: Czy muszę kuć ściany albo wymieniać instalację elektryczną?\nOdpowiedź: Nie. Korzystamy z rozwiązań bezprzewodowych (Zigbee, Wi-Fi 6/7, Thread). Dodatkowo, większość urządzeń montujemy w gniazdku lub na taśmę 3M. Remont nie jest potrzebny."
+  },
+  {
+    "id": "faq-pl-2",
+    "lang": "pl",
+    "topic": "faq",
+    "text": "Pytanie: Ile to realnie kosztuje z urządzeniami?\nOdpowiedź: Zależnie od pakietu: od ok. 2 000 zł (ECO Start) do 15 000 zł (COMFORT Plus) łącznie ze sprzętem. Usługę wyceniamy z góry, sprzęt kupujesz po kosztach."
+  },
+  {
+    "id": "faq-pl-3",
+    "lang": "pl",
+    "topic": "faq",
+    "text": "Pytanie: Który ekosystem wybrać: Apple, Alexa czy Google?\nOdpowiedź: Podczas darmowej konsultacji sprawdzamy, z jakich urządzeń już korzystasz i jakie są Twoje priorytety (np. Oszczędność, cena, bezpieczeństwo). Potem rekomendujemy najlepszy ekosystem lub hybrydę."
+  },
+  {
+    "id": "faq-pl-4",
+    "lang": "pl",
+    "topic": "faq",
+    "text": "Pytanie: Czy mogę sterować domem spoza sieci Wi-Fi?\nOdpowiedź: Tak. Wszystkie trzy platformy oferują zdalny dostęp przez sieci mobilne, a Home Assistant może działać przez bezpieczną chmurę Nabu Casa."
+  },
+  {
+    "id": "faq-pl-5",
+    "lang": "pl",
+    "topic": "faq",
+    "text": "Pytanie: Co jeśli padnie internet albo prąd?\nOdpowiedź: Lokalne sterowanie (przyciski, HomeKit-Thread, Zigbee) działa dalej, a po przywróceniu sieci scenariusze wracają automatycznie. Na życzenie instalujemy zasilanie awaryjne UPS."
+  },
+  {
+    "id": "faq-pl-6",
+    "lang": "pl",
+    "topic": "faq",
+    "text": "Pytanie: Czy smart-dom podniesie rachunki za prąd?\nOdpowiedź: Przeciwnie — automatyczne wygaszanie świateł i inteligentne ogrzewanie zwykle obniżają koszty o 10–21%. Urządzenia w trybie czuwania pobierają poniżej 1 W. Jest również możliwość wykorzystania technologii PoE w przypadku wcześniej rozprowadzonej sieci ethernet."
+  },
+  {
+    "id": "faq-pl-7",
+    "lang": "pl",
+    "topic": "faq",
+    "text": "Pytanie: Jak chronione są moje dane i nagrania z kamer?\nOdpowiedź: Wybieramy sprzęt z szyfrowaniem end-to-end. Nie zbieramy Twoich danych marketingowych, a logi przechowujesz lokalnie lub w chmurze producenta."
+  },
+  {
+    "id": "faq-pl-8",
+    "lang": "pl",
+    "topic": "faq",
+    "text": "Pytanie: Mam już kilka żarówek IKEA / gniazdka TP-Link. Da się je włączyć do systemu?\nOdpowiedź: Tak. Integrujemy istniejące urządzenia, o ile są zgodne ze standardami obsługi Twojego hub-a. Jeśli nie — podpowiemy tańszy zamiennik."
+  },
+  {
+    "id": "faq-pl-9",
+    "lang": "pl",
+    "topic": "faq",
+    "text": "Pytanie: Jak długo trwa montaż i konfiguracja?\nOdpowiedź: Pakiet ECO Start zamykamy zwykle w ciągu jednego dnia roboczego, jeśli zgłoszenie wpłynie przed godziną 14:00. Złożone instalacje (COMFORT Plus) to kilka dni wraz z testami i szkoleniem."
+  },
+  {
+    "id": "benefit-en-1",
+    "lang": "en",
+    "topic": "benefits",
+    "text": "Benefit: Smart Control Interfaces\nDescription: Control your home through Magic Mirrors, tablets, or smartphones. Enjoy quick access to lighting, temperature, and entertainment — all from sleek, intuitive displays wherever you are."
+  },
+  {
+    "id": "benefit-en-2",
+    "lang": "en",
+    "topic": "benefits",
+    "text": "Benefit: Scenario automation\nDescription: Create your own home automation scenarios – morning wake-up with opening blinds and turning on the coffee maker, or evening mode with dimmed lights and closed doors. Automation increases convenience, saves time and adapts your home to your daily rhythm."
+  },
+  {
+    "id": "benefit-en-3",
+    "lang": "en",
+    "topic": "benefits",
+    "text": "Benefit: Security\nDescription: Smart home takes care of your security – cameras, motion sensors and alarm systems work 24/7. You receive notifications about suspicious events, and remote monitoring allows you to check what's happening at home, regardless of where you are."
+  },
+  {
+    "id": "benefit-en-4",
+    "lang": "en",
+    "topic": "benefits",
+    "text": "Benefit: Usage statistics\nDescription: Gain full control over energy consumption and device operation. Smart home analyzes data, shows statistics and helps optimize daily habits. This allows you to save money, detect irregularities and better manage your household budget."
+  },
+  {
+    "id": "benefit-en-5",
+    "lang": "en",
+    "topic": "benefits",
+    "text": "Benefit: Remote updates and service\nDescription: Your smart home system always runs on the latest software. Updates and diagnostics are performed remotely, without the need for a technician visit. This is convenience, greater security and certainty that all functions work smoothly and without interruptions."
+  },
+  {
+    "id": "benefit-en-6",
+    "lang": "en",
+    "topic": "benefits",
+    "text": "Benefit: Energy savings\nDescription: Smart home helps reduce electricity and heating consumption through automation, schedules and presence sensors. The system turns off unused devices and adjusts settings to your lifestyle, which translates into real savings on bills."
+  },
+  {
+    "id": "benefit-en-7",
+    "lang": "en",
+    "topic": "benefits",
+    "text": "Benefit: Voice Control\nDescription: A smart home enables voice control — turning lights on, adjusting the temperature, or playing music with simple commands. It's a convenient solution that enhances comfort and makes everyday life easier."
+  },
+  {
+    "id": "benefit-en-8",
+    "lang": "en",
+    "topic": "benefits",
+    "text": "Benefit: Remote Management\nDescription: Manage your home from anywhere in the world. With mobile apps and web interfaces, you can remotely control all your smart home devices, increasing convenience and flexibility."
+  },
+  {
+    "id": "benefit-pl-1",
+    "lang": "pl",
+    "topic": "benefits",
+    "text": "Korzyść: Inteligentne Interfejsy Sterowania\nOpis: Steruj swoim domem za pomocą Magic Mirror, tabletu lub smartfona. Zyskaj szybki dostęp do oświetlenia, temperatury i rozrywki — wszystko w eleganckich, intuicyjnych interfejsach, gdziekolwiek jesteś."
+  },
+  {
+    "id": "benefit-pl-2",
+    "lang": "pl",
+    "topic": "benefits",
+    "text": "Korzyść: Automatyzacja scenariuszy\nOpis: Twórz własne scenariusze działania domu – poranne wstawanie z odsłonięciem rolet i włączeniem ekspresu, czy wieczorny tryb z przyciemnionym światłem i zamkniętymi drzwiami. Automatyzacja zwiększa wygodę, oszczędza czas i dostosowuje dom do Twojego rytmu dnia."
+  },
+  {
+    "id": "benefit-pl-3",
+    "lang": "pl",
+    "topic": "benefits",
+    "text": "Korzyść: Bezpieczeństwo\nOpis: Inteligentny dom dba o Twoje bezpieczeństwo – kamery, czujniki ruchu i systemy alarmowe działają 24/7. Otrzymujesz powiadomienia o podejrzanych zdarzeniach, a zdalny podgląd pozwala sprawdzić, co dzieje się w domu, niezależnie od miejsca, w którym jesteś."
+  },
+  {
+    "id": "benefit-pl-4",
+    "lang": "pl",
+    "topic": "benefits",
+    "text": "Korzyść: Statystyki użycia\nOpis: Zyskaj pełną kontrolę nad zużyciem energii i działaniem urządzeń. Inteligentny dom analizuje dane, pokazuje statystyki i pomaga optymalizować codzienne nawyki. Dzięki temu możesz oszczędzać, wykrywać nieprawidłowości i lepiej zarządzać domowym budżetem."
+  },
+  {
+    "id": "benefit-pl-5",
+    "lang": "pl",
+    "topic": "benefits",
+    "text": "Korzyść: Zdalna aktualizacja i serwis\nOpis: Twój system smart home zawsze działa na najnowszym oprogramowaniu. Aktualizacje i diagnostyka odbywają się zdalnie, bez potrzeby wizyty technika. To wygoda, większe bezpieczeństwo i pewność, że wszystkie funkcje działają sprawnie i bez zakłóceń."
+  },
+  {
+    "id": "benefit-pl-6",
+    "lang": "pl",
+    "topic": "benefits",
+    "text": "Korzyść: Oszczędność energii\nOpis: Inteligentny dom pomaga ograniczyć zużycie prądu i ogrzewania dzięki automatyzacji, harmonogramom i czujnikom obecności. System wyłącza nieużywane urządzenia i dostosowuje ustawienia do Twojego trybu życia, co przekłada się na realne oszczędności w rachunkach."
+  },
+  {
+    "id": "benefit-pl-7",
+    "lang": "pl",
+    "topic": "benefits",
+    "text": "Korzyść: Zarządzanie głosem\nOpis: Inteligentny dom umożliwia sterowanie głosowe – włączanie świateł, regulacja temperatury czy odtwarzanie muzyki za pomocą prostych komend. To wygodne rozwiązanie, które zwiększa komfort i ułatwia codzienne życie."
+  },
+  {
+    "id": "benefit-pl-8",
+    "lang": "pl",
+    "topic": "benefits",
+    "text": "Korzyść: Zdalne sterowanie\nOpis: Zarządzaj swoim domem z dowolnego miejsca na świecie. Dzięki aplikacjom mobilnym i interfejsom webowym możesz kontrolować wszystkie urządzenia smart home zdalnie, co zwiększa wygodę i elastyczność."
+  },
+  {
+    "id": "scenario-en-1",
+    "lang": "en",
+    "topic": "scenarios",
+    "text": "Scenario: Good mood\nActivated by voice command: 'Turn on good mood'\nTasks performed:\n- Turning on lights in living room and kitchen\n- Closing blinds in living room\n- Setting comfortable temperature to 22°C\n- Playing your favorite playlist"
+  },
+  {
+    "id": "scenario-en-2",
+    "lang": "en",
+    "topic": "scenarios",
+    "text": "Scenario: Night mode\nActivated by voice command: 'Turn on night mode'\nTasks performed:\n- Turning off all lights\n- Closing blinds throughout the house\n- Lowering temperature to 19°C\n- Enabling alarm standby mode"
+  },
+  {
+    "id": "scenario-pl-1",
+    "lang": "pl",
+    "topic": "scenarios",
+    "text": "Scenariusz: Dobry nastrój\nAktywowany komendą głosową: 'Włącz dobry nastrój'\nWykonywane zadania:\n- Włączam światła w salonie i kuchni\n- Zasłaniam rolety w salonie\n- Ustawiam komfortową temperaturę 22°C\n- Odtwarzam ulubioną playlistę"
+  },
+  {
+    "id": "scenario-pl-2",
+    "lang": "pl",
+    "topic": "scenarios",
+    "text": "Scenariusz: Tryb nocny\nAktywowany komendą głosową: 'Włącz tryb nocny'\nWykonywane zadania:\n- Wyłączam wszystkie światła\n- Zasłaniam rolety w całym domu\n- Obniżam temperaturę do 19°C\n- Włączam tryb czuwania alarmu"
+  },
+  {
+    "id": "contact-en",
+    "lang": "en",
+    "topic": "contact",
+    "text": "Contact Klaumark:\nEmail: admin@klaumark.com\nPhone: +48 573 473 042\nDescription: Get in touch with our smart home experts. We're here to answer your questions, provide consultation, and help you transform your home into an intelligent, energy-efficient space.\nYou can also send a message via the contact form on klaumark.com. Subject options: Quote, Question, Presentation, Other."
+  },
+  {
+    "id": "contact-pl",
+    "lang": "pl",
+    "topic": "contact",
+    "text": "Kontakt z Klaumark:\nEmail: admin@klaumark.com\nTelefon: +48 573 473 042\nOpis: Skontaktuj się z naszymi ekspertami smart home. Jesteśmy tutaj, aby odpowiedzieć na Twoje pytania, zapewnić konsultację i pomóc przekształcić Twój dom w inteligentną, energooszczędną przestrzeń.\nMożesz też wysłać wiadomość przez formularz kontaktowy na klaumark.com. Dostępne tematy: Wycena, Pytanie, Prezentacja, Inny."
+  },
+  {
+    "id": "hero-en",
+    "lang": "en",
+    "topic": "hero",
+    "text": "About Klaumark:\nHeadline: Budget-friendly smart home\nDescription: At Klaumark, we believe your home should feel safe, comfortable, and effortless. That's why we create smart home solutions that are easy to use, budget-friendly, and built around your everyday life.\nTagline: Smart living starts here.\nWe connect popular devices (Philips Hue, Aqara, Shelly, Tado°, Tuya) with Apple HomeKit, Amazon Alexa or Google Nest, and configure everything so your home saves energy, takes care of security and facilitates daily tasks — without subscriptions or hidden costs. You buy equipment at cost — invoices/receipts go directly to you."
+  },
+  {
+    "id": "hero-pl",
+    "lang": "pl",
+    "topic": "hero",
+    "text": "O Klaumark:\nNagłówek: Inteligentny dom przyjazny dla budżetu\nOpis: W Klaumark wierzymy, że dom powinien być miejscem pełnym spokoju, wygody i prostoty. Dlatego tworzymy inteligentne rozwiązania, które są łatwe w obsłudze, przyjazne dla budżetu i dopasowane do codziennego życia.\nHasło: Inteligentny dom zaczyna się tutaj.\nŁączymy popularne urządzenia (Philips Hue, Aqara, Shelly, Tado°, Tuya) z Apple HomeKit, Amazon Alexa lub Google Nest, a całość konfigurujemy tak, by Twój dom oszczędzał energię, dbał o bezpieczeństwo i ułatwiał codzienne zadania — bez abonamentów ani ukrytych kosztów. Sprzęt kupujesz po kosztach — faktury/paragony trafiają bezpośrednio do Ciebie."
+  }
+]
