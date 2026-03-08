@@ -27,6 +27,7 @@
   var BRAND_BLUE = '#0052E4';
   var DISMISSED_KEY = 'klaudio_dismissed';
   var AUTO_OPEN_DELAY = 30000;
+  var TTS_URL = 'https://chat.klaumark.com/api/tts';
 
   // ─────────────────────────────────────────────────────────────────────────────
   // 3. Shadow DOM setup
@@ -180,6 +181,25 @@
     '#klaudio-send:not(:disabled):hover { transform: scale(1.08); }',
     '#klaudio-send svg { width: 16px; height: 16px; }',
 
+    /* Mic button */
+    '#klaudio-mic {',
+    '  width: 36px; height: 36px; border-radius: 50%;',
+    '  background: transparent; border: 1.5px solid #dde3f0; cursor: pointer;',
+    '  display: flex; align-items: center; justify-content: center;',
+    '  transition: border-color 0.15s, background 0.15s; flex-shrink: 0;',
+    '}',
+    '#klaudio-mic:hover { border-color: ' + BRAND_BLUE + '; }',
+    '#klaudio-mic.listening {',
+    '  border-color: #e53e3e; background: #fff5f5;',
+    '  animation: klaudio-mic-pulse 1.2s ease-in-out infinite;',
+    '}',
+    '@keyframes klaudio-mic-pulse {',
+    '  0%, 100% { box-shadow: 0 0 0 0 rgba(229,62,62,0.35); }',
+    '  50% { box-shadow: 0 0 0 6px rgba(229,62,62,0); }',
+    '}',
+    '#klaudio-mic:disabled { opacity: 0.35; cursor: default; }',
+    '#klaudio-mic svg { width: 16px; height: 16px; }',
+
     /* Responsive — keep widget visible on small screens */
     '@media (max-width: 400px) {',
     '  #klaudio-panel { width: calc(100vw - 24px); right: 12px; bottom: 80px; }',
@@ -229,6 +249,14 @@
 
     '    <div id="klaudio-input-area">',
     '      <input id="klaudio-input" type="text" autocomplete="off" />',
+    '      <button id="klaudio-mic" aria-label="Voice input">',
+    '        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">',
+    '          <rect x="9" y="2" width="6" height="12" rx="3" fill="' + BRAND_BLUE + '"/>',
+    '          <path d="M5 11a7 7 0 0014 0" stroke="' + BRAND_BLUE + '" stroke-width="1.5" stroke-linecap="round" fill="none"/>',
+    '          <line x1="12" y1="18" x2="12" y2="22" stroke="' + BRAND_BLUE + '" stroke-width="1.5" stroke-linecap="round"/>',
+    '          <line x1="9" y1="22" x2="15" y2="22" stroke="' + BRAND_BLUE + '" stroke-width="1.5" stroke-linecap="round"/>',
+    '        </svg>',
+    '      </button>',
     '      <button id="klaudio-send" disabled aria-label="Send message">',
     '        <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">',
     '          <path d="M2 21L23 12 2 3v7l15 2-15 2z"/>',
@@ -251,6 +279,16 @@
   var isOpen = false;
   var isStreaming = false;
   var firstMessageSent = false;
+
+  // Web Speech API compatibility (Chrome/Edge: yes; Firefox: no; Safari 16.4+: partial)
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var hasMicSupport = !!SpeechRecognition;
+
+  // Mic unsupported fallback messages
+  var MIC_UNSUPPORTED = {
+    pl: 'Mikrofon działa w Chrome i Edge. W tej przeglądarce napisz wiadomość ręcznie.',
+    en: 'Microphone works in Chrome and Edge. Please type your message in this browser.',
+  };
 
   // Lead capture state machine
   var leadCaptureState = null; // null | 'collecting_name' | 'collecting_email'
@@ -293,6 +331,7 @@
   var quickRepliesEl = shadow.getElementById('klaudio-quick-replies');
   var inputEl = shadow.getElementById('klaudio-input');
   var sendBtn = shadow.getElementById('klaudio-send');
+  var micBtn = shadow.getElementById('klaudio-mic');
 
   // ─────────────────────────────────────────────────────────────────────────────
   // 8. Language detection (from user's first message only)
