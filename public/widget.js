@@ -296,14 +296,14 @@
 
   // Quick reply suggestions
   var INITIAL_REPLIES = {
-    pl: ['Jakie macie pakiety?', 'Ile kosztuje instalacja?', 'Jak działa smart home?'],
-    en: ['What packages do you offer?', 'How much does installation cost?', 'How does smart home work?'],
+    pl: ['Od czego zacząć ze smart home?', 'Co mogę zautomatyzować w domu?', 'Ile można oszczędzić na energii?'],
+    en: ['Where do I start with smart home?', 'What can I automate at home?', 'How much can I save on energy?'],
   };
 
   // Greeting messages
   var GREETINGS = {
-    pl: 'Hej! Jestem Klaudio, asystent AI Klaumark. Chętnie pomogę Ci dobrać system smart home! 🏠',
-    en: "Hi! I'm Klaudio, Klaumark's AI assistant. I'd love to help you find the right smart home solution! 🏠",
+    pl: 'Hej! Jestem Klaudio. Myślisz o smart home, ale nie wiesz od czego zacząć? Chętnie pomogę! 🏠',
+    en: "Hi! I'm Klaudio. Thinking about smart home but not sure where to start? I'm here to help! 🏠",
   };
 
   // Error messages
