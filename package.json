@@ -11,6 +11,8 @@
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.58",
     "@ai-sdk/openai": "^3.0.41",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.36.3",
     "@upstash/vector": "^1.2.2",
     "ai": "^6.0.116",
     "next": "16.1.6",

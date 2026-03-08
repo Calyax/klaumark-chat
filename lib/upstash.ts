@@ -16,11 +16,13 @@ export async function findRelevantContent(
     model: openai.embedding('text-embedding-3-small'),
     value: query,
   });
+  // lang is pre-validated to 'en' | 'pl' by the API route — safe to interpolate
+  const safeLang = lang === 'pl' ? 'pl' : 'en';
   const results = await index.query({
     vector: embedding,
     topK,
     includeMetadata: true,
-    filter: `lang = '${lang}'`,
+    filter: `lang = '${safeLang}'`,
   });
   return results
     .map((r) => (r.metadata as { text: string }).text)

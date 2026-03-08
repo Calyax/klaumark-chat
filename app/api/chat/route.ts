@@ -2,6 +2,8 @@ import { anthropic } from '@ai-sdk/anthropic';
 import { streamText, tool, zodSchema, stepCountIs } from 'ai';
 import { z } from 'zod';
 import { NextRequest } from 'next/server';
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
 import { findRelevantContent } from '@/lib/upstash';
 import { buildSystemPrompt } from '@/lib/system-prompt';
 import { corsHeaders, handleOptions } from '@/lib/cors';
@@ -9,6 +11,34 @@ import { PACKAGES, FAQS } from '@/lib/knowledge-base';
 
 export const runtime = 'nodejs'; // NOT edge — Upstash Vector SDK needs Node
 export const maxDuration = 300; // Vercel Pro: 300s max
+
+// ── Rate limiter — 20 req/min per IP, fail-open if Redis not configured ──────
+let ratelimit: Ratelimit | null = null;
+try {
+  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    ratelimit = new Ratelimit({
+      redis: new Redis({
+        url: process.env.UPSTASH_REDIS_REST_URL,
+        token: process.env.UPSTASH_REDIS_REST_TOKEN,
+      }),
+      limiter: Ratelimit.slidingWindow(20, '1 m'),
+      prefix: 'klaudio:rl',
+    });
+  }
+} catch {
+  // Fail-open: allow requests through if Redis is misconfigured
+}
+
+// ── Input schema (H2 + M4) ────────────────────────────────────────────────────
+const MessageSchema = z.object({
+  role: z.enum(['user', 'assistant']),
+  content: z.string().min(1).max(4000),
+});
+
+const BodySchema = z.object({
+  messages: z.array(MessageSchema).min(1).max(50),
+  lang: z.enum(['en', 'pl']).optional(),
+});
 
 export async function OPTIONS(req: NextRequest) {
   const origin = req.headers.get('origin') ?? '';
@@ -24,19 +54,35 @@ export async function POST(req: NextRequest) {
     return new Response('Forbidden', { status: 403 });
   }
 
-  let messages: Array<{ role: string; content: string }>;
+  // ── Rate limiting (H1) ───────────────────────────────────────────────────
+  if (ratelimit) {
+    const ip =
+      req.headers.get('x-forwarded-for')?.split(',')[0].trim() ??
+      req.headers.get('x-real-ip') ??
+      'anonymous';
+    const { success } = await ratelimit.limit(ip);
+    if (!success) {
+      return new Response('Too Many Requests', { status: 429, headers });
+    }
+  }
+
+  // ── Parse & validate body (H2 + M4) ─────────────────────────────────────
+  let messages: z.infer<typeof MessageSchema>[];
   let lang: 'en' | 'pl';
 
   try {
-    const body = await req.json();
-    messages = body.messages;
-    lang = body.lang === 'pl' ? 'pl' : 'en';
+    const raw = await req.json();
+    const parsed = BodySchema.safeParse(raw);
+    if (!parsed.success) {
+      return new Response('Bad Request: ' + parsed.error.issues[0]?.message, {
+        status: 400,
+        headers,
+      });
+    }
+    messages = parsed.data.messages;
+    lang = parsed.data.lang === 'pl' ? 'pl' : 'en';
   } catch {
     return new Response('Bad Request', { status: 400, headers });
-  }
-
-  if (!messages?.length) {
-    return new Response('Bad Request: messages required', { status: 400, headers });
   }
 
   // RAG: embed last user message, retrieve relevant Klaumark content
@@ -52,10 +98,6 @@ export async function POST(req: NextRequest) {
   }
 
   // AI SDK tool definitions — complement RAG with precise structured lookups.
-  // Tools pull from in-memory PACKAGES/FAQS (already seeded in 03-02) to avoid
-  // extra Upstash calls. Model invokes these when it needs exact pricing or a
-  // specific FAQ answer rather than a semantic search result.
-  // AI SDK v6: tool() uses inputSchema (not parameters), execute takes (input, options)
   const tools = {
     getPackageInfo: tool({
       description:
@@ -121,18 +163,14 @@ export async function POST(req: NextRequest) {
     }),
   };
 
-  // AI SDK v6: maxOutputTokens replaces maxTokens
-  // maxSteps: model can call a tool (step 1) then generate text response (step 2)
   const result = streamText({
     model: anthropic('claude-haiku-4-5'),
     system: buildSystemPrompt(context, lang),
-    messages: messages as any,
+    messages,
     maxOutputTokens: 400,
     tools,
     stopWhen: stepCountIs(5),
   });
 
-  // AI SDK v6: toTextStreamResponse() replaces toDataStreamResponse()
-  // CORS headers must be on the streaming response itself (not just OPTIONS)
   return result.toTextStreamResponse({ headers });
 }
