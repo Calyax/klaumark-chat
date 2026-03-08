@@ -451,6 +451,7 @@
   function sendMessage(userContent) {
     if (isStreaming) return;
     isStreaming = true;
+    if (micBtn) micBtn.disabled = true;
 
     // Hide quick replies while streaming
     quickRepliesEl.classList.add('hidden');
@@ -519,6 +520,7 @@
         messages.push({ role: 'assistant', content: botContent });
       }
       isStreaming = false;
+      if (micBtn) micBtn.disabled = false;
 
       // Check for lead capture intent
       checkLeadIntent(userContent, botContent);
@@ -529,6 +531,7 @@
       }
 
       scrollToBottom();
+      if (botContent) { speakText(botContent); }  // Play TTS for bot response (non-blocking)
     });
   }
 
@@ -685,6 +688,103 @@
   }
 
   // ─────────────────────────────────────────────────────────────────────────────
+  // 22. Mic state — 'idle' | 'listening'
+  // ─────────────────────────────────────────────────────────────────────────────
+  function setMicState(state) {
+    if (!micBtn) return;
+    if (state === 'listening') {
+      micBtn.classList.add('listening');
+      micBtn.setAttribute('aria-label', detectedLang === 'pl' ? 'Słucham…' : 'Listening…');
+    } else {
+      micBtn.classList.remove('listening');
+      micBtn.setAttribute('aria-label', detectedLang === 'pl' ? 'Wpisz głosowo' : 'Voice input');
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 23. Voice input — Web Speech API (Chrome/Edge) with Firefox/Safari fallback
+  // ─────────────────────────────────────────────────────────────────────────────
+  function startVoiceInput() {
+    // VOICE-05: Browser fallback for Firefox / older Safari
+    if (!hasMicSupport) {
+      appendBotMessageEl(MIC_UNSUPPORTED[detectedLang] || MIC_UNSUPPORTED.pl);
+      return;
+    }
+
+    // Prevent concurrent listening
+    if (isStreaming) return;
+
+    var recognition = new SpeechRecognition();
+    recognition.lang = detectedLang === 'pl' ? 'pl-PL' : 'en-US';
+    recognition.interimResults = false; // final transcript only — walkie-talkie UX
+    recognition.continuous = false;     // single utterance per button press
+
+    recognition.onresult = function (event) {
+      var transcript = event.results[0][0].transcript;
+      setMicState('idle');
+      if (transcript) {
+        // Route transcript through same pipeline as typed text
+        handleUserInput(transcript);
+      }
+    };
+
+    recognition.onerror = function (event) {
+      // Errors: no-speech, audio-capture, not-allowed, network, aborted
+      console.warn('SpeechRecognition error:', event.error);
+      setMicState('idle');
+      if (event.error === 'not-allowed') {
+        appendBotMessageEl(
+          detectedLang === 'pl'
+            ? 'Brak dostępu do mikrofonu. Sprawdź uprawnienia przeglądarki.'
+            : 'Microphone access denied. Check browser permissions.'
+        );
+      }
+    };
+
+    recognition.onend = function () {
+      setMicState('idle');
+    };
+
+    recognition.start();
+    setMicState('listening');
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // 24. TTS playback — fetch /api/tts proxy, decode MP3 with AudioContext
+  //     AudioContext created inside user-gesture flow (mic button or send button)
+  //     to satisfy iOS/Safari autoplay policy.
+  // ─────────────────────────────────────────────────────────────────────────────
+  function speakText(text) {
+    if (!text || !text.trim()) return;
+
+    fetch(TTS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text, lang: detectedLang }),
+    })
+    .then(function (resp) {
+      if (!resp.ok) throw new Error('TTS HTTP ' + resp.status);
+      return resp.arrayBuffer();
+    })
+    .then(function (arrayBuffer) {
+      // AudioContext must be created here (inside async resolution of a user gesture)
+      var AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return; // Safari < 14.1 — silent fail, text still visible
+      var audioCtx = new AudioCtx();
+      return audioCtx.decodeAudioData(arrayBuffer).then(function (decoded) {
+        var source = audioCtx.createBufferSource();
+        source.buffer = decoded;
+        source.connect(audioCtx.destination);
+        source.start(0);
+      });
+    })
+    .catch(function (err) {
+      // TTS failure is non-critical — text response is always visible
+      console.warn('TTS playback failed:', err);
+    });
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
   // 19. Event listeners
   // ─────────────────────────────────────────────────────────────────────────────
   launcher.addEventListener('click', function () {
@@ -717,6 +817,13 @@
       handleUserInput(text);
     }
   });
+
+  // Mic button — start voice input (toggle: click to listen, auto-stops on speech end)
+  if (micBtn) {
+    micBtn.addEventListener('click', function () {
+      startVoiceInput();
+    });
+  }
 
   // ─────────────────────────────────────────────────────────────────────────────
   // 20. Auto-open after 30s (suppressed if already dismissed this session)
