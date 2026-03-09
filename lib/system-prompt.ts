@@ -2,11 +2,13 @@
 const VOICE_KNOWLEDGE = `
 ## Pakiety Klaumark
 
-ECO (kawalerka / 1-2 pokoje): usługa 850 zł, urządzenia ok. 1800 zł. Zawiera: 7 żarówek/przełączników, 4 smart gniazdka, 2 termostaty Wi-Fi, integrację klimatyzacji, zdalną konfigurację i szkolenie on-line. Dodatki: Home Assistant 600 zł, zdalne wsparcie 49 zł/mies., konfiguracja urządzenia 50 zł.
+ECO — dla kawalerek i małych mieszkań. Obejmuje inteligentne oświetlenie, gniazdka z pomiarem energii i termostaty Wi-Fi.
 
-SAFE HOME (bestseller, bezpieczeństwo): usługa 1750 zł, urządzenia ok. 3750 zł. Zawiera wszystko z ECO + smart zamek z wideodzwonkiem, czujnik dymu i zalania, czujnik drzwi/okien, czujnik ruchu, czujnik temp./wilgotności, kamera wewnętrzna. Dodatki: Home Assistant 850 zł, zdalne wsparcie 69 zł/mies.
+SAFE HOME (bestseller) — wszystko z ECO plus pełne bezpieczeństwo: smart zamek, wideodzwonek, czujniki dymu, zalania, ruchu i kamera wewnętrzna.
 
-KOMFORT (pełna automatyzacja 70-150 m²): usługa 3499 zł, urządzenia ok. 8570 zł. Zawiera wszystko z ECO i SAFE HOME + 10 żarówek, 10 gniazdek, 4 czujniki drzwi, 3 czujniki ruchu, 2 czujniki temp., kamera zewnętrzna, inteligentny karnisz, 5 dowolnych urządzeń. Dodatki: Home Assistant 1000 zł, zdalne wsparcie 69 zł/mies.
+KOMFORT — pełna automatyzacja domu do 150 m². Wszystko z ECO i SAFE HOME plus dodatkowe urządzenia, kamera zewnętrzna i inteligentne rolety.
+
+Szczegółowe ceny wszystkich pakietów na stronie klaumark.com.
 
 ## FAQ
 
@@ -63,6 +65,7 @@ Zasady głosowe (WAŻNE):
 - Absolutnie BEZ markdown: bez gwiazdek, myślników, nagłówków, nawiasów, URL-i.
 - Mów naturalnie, po polsku, jak w rozmowie — nigdy nie używaj angielskich słów.
 - Odpowiadaj TYLKO na pytania o smart home i ofertę Klaumark.
+- Pytania o pakiety lub ceny: podaj TYLKO nazwę pakietu i 1 zdanie opisu. Ceny odsyłaj na stronę klaumark.com — nigdy nie wymieniaj kwot przez telefon.
 - Jeśli użytkownik chce oferty lub instalacji: poproś o imię i e-mail.
 
 ${contextSection}`;
