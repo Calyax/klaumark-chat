@@ -56,7 +56,7 @@
 
 import { NextRequest } from 'next/server';
 import { anthropic } from '@ai-sdk/anthropic';
-import { streamText } from 'ai';
+import { streamText, tool } from 'ai';
 import { z } from 'zod';
 import { findRelevantContent } from '@/lib/upstash';
 import { buildVoiceSystemPrompt } from '@/lib/system-prompt';
@@ -123,6 +123,12 @@ export async function POST(req: NextRequest) {
       system: buildVoiceSystemPrompt(ragContext),
       messages: messages as Array<{ role: 'user' | 'assistant'; content: string }>,
       maxOutputTokens: 150, // hard cap — phone answers must be 2-3 sentences max
+      tools: {
+        transferCall: tool({
+          description: 'Transfer the call to a human consultant. Call this when the user wants a quote, pricing, installation, or to speak with a person.',
+          inputSchema: z.object({}),
+        }),
+      },
     });
   } catch (err) {
     console.error('/api/voice streamText init error:', err);
@@ -139,17 +145,38 @@ export async function POST(req: NextRequest) {
     return new Response(errorStream, { headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache' } });
   }
 
-  // Stream tokens to VAPI as SSE deltas — VAPI chunks by punctuation boundary
+  // Stream tokens + tool calls to VAPI as SSE deltas
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        for await (const delta of result.textStream) {
-          const chunk = {
-            id,
-            object: 'chat.completion.chunk',
-            choices: [{ index: 0, delta: { content: delta }, finish_reason: null }],
-          };
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify(chunk)}\n\n`));
+        for await (const event of result.fullStream) {
+          if (event.type === 'text-delta') {
+            const chunk = {
+              id,
+              object: 'chat.completion.chunk',
+              choices: [{ index: 0, delta: { content: event.text }, finish_reason: null }],
+            };
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify(chunk)}\n\n`));
+          } else if (event.type === 'tool-call') {
+            // Emit tool_call delta so VAPI executes the transfer
+            const toolChunk = {
+              id,
+              object: 'chat.completion.chunk',
+              choices: [{
+                index: 0,
+                delta: {
+                  tool_calls: [{
+                    index: 0,
+                    id: event.toolCallId,
+                    type: 'function',
+                    function: { name: event.toolName, arguments: JSON.stringify(event.input ?? {}) },
+                  }],
+                },
+                finish_reason: 'tool_calls',
+              }],
+            };
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify(toolChunk)}\n\n`));
+          }
         }
       } catch (err) {
         console.error('/api/voice stream error:', err);
