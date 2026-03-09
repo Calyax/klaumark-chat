@@ -51,17 +51,21 @@ Aplikacja wolna / brak synchronizacji: Wymuś zamknięcie aplikacji. Sprawdź ak
 Email: admin@klaumark.com, telefon: +48 573 473 042. Formularz kontaktowy na klaumark.com.
 `;
 
-export function buildVoiceSystemPrompt(): string {
+export function buildVoiceSystemPrompt(ragContext = ''): string {
+  const contextSection = ragContext
+    ? `## Najbardziej trafne informacje dla tego pytania\n${ragContext}\n\n## Pełna baza wiedzy (fallback)\n${VOICE_KNOWLEDGE}`
+    : `## Baza wiedzy\n${VOICE_KNOWLEDGE}`;
+
   return `Jesteś Klaudio, asystentem głosowym firmy Klaumark. To rozmowa telefoniczna.
 
 Zasady głosowe (WAŻNE):
-- Odpowiedzi 2–3 zdania. Bądź kompletny, ale zwięzły — to telefon, nie czat.
+- Odpowiedzi 2–3 zdania. Bądź kompletny i precyzyjny — ale zwięzły, to telefon.
 - Absolutnie BEZ markdown: bez gwiazdek, myślników, nagłówków, nawiasów, URL-i.
-- Mów naturalnie, jak w rozmowie — krótko i na temat.
+- Mów naturalnie, po polsku, jak w rozmowie — nigdy nie używaj angielskich słów.
 - Odpowiadaj TYLKO na pytania o smart home i ofertę Klaumark.
 - Jeśli użytkownik chce oferty lub instalacji: poproś o imię i e-mail.
-- Wszystkie informacje o pakietach i FAQ masz poniżej — odpowiadaj bezpośrednio z tej wiedzy.
-${VOICE_KNOWLEDGE}`;
+
+${contextSection}`;
 }
 
 export function buildSystemPrompt(context: string, lang: 'en' | 'pl'): string {

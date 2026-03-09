@@ -58,6 +58,7 @@ import { NextRequest } from 'next/server';
 import { anthropic } from '@ai-sdk/anthropic';
 import { streamText } from 'ai';
 import { z } from 'zod';
+import { findRelevantContent } from '@/lib/upstash';
 import { buildVoiceSystemPrompt } from '@/lib/system-prompt';
 
 export const runtime = 'nodejs';
@@ -99,17 +100,27 @@ export async function POST(req: NextRequest) {
     return new Response('Bad Request', { status: 400 });
   }
 
-  // ── Call Claude — streamText pipes tokens to VAPI as they arrive ─────────
-  // This eliminates the pause: VAPI starts TTS on the first sentence
-  // while Claude is still generating the rest.
+  // ── RAG with timeout — fall back to inline KB if Upstash is slow ─────────
+  const lastUserMsg = [...messages].reverse().find((m) => m.role === 'user')?.content ?? '';
+  let ragContext = '';
+  try {
+    ragContext = await Promise.race([
+      findRelevantContent(lastUserMsg, 'pl'),
+      new Promise<string>((_, reject) => setTimeout(() => reject(new Error('timeout')), 1500)),
+    ]);
+  } catch {
+    // Upstash timed out or failed — VOICE_KNOWLEDGE fallback is in the system prompt
+  }
+
+  // ── Call Claude Sonnet — streams tokens to VAPI as they arrive ───────────
   const id = 'chatcmpl-' + Date.now();
   const encoder = new TextEncoder();
 
   let result;
   try {
     result = streamText({
-      model: anthropic('claude-haiku-4-5'),
-      system: buildVoiceSystemPrompt(),
+      model: anthropic('claude-sonnet-4-5'),
+      system: buildVoiceSystemPrompt(ragContext),
       messages: messages as Array<{ role: 'user' | 'assistant'; content: string }>,
       maxOutputTokens: 300, // full KB in system prompt — no tools needed, answers directly
     });
