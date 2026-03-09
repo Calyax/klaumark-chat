@@ -56,7 +56,7 @@
 
 import { NextRequest } from 'next/server';
 import { anthropic } from '@ai-sdk/anthropic';
-import { generateText, tool, zodSchema, stepCountIs } from 'ai';
+import { streamText, tool, zodSchema, stepCountIs } from 'ai';
 import { z } from 'zod';
 import { buildVoiceSystemPrompt } from '@/lib/system-prompt';
 import { PACKAGES, FAQS } from '@/lib/knowledge-base';
@@ -168,76 +168,67 @@ export async function POST(req: NextRequest) {
     }),
   };
 
-  // ── Call Claude Haiku — generateText (non-streaming, returns plain JSON) ──
-  let responseText = '';
+  // ── Call Claude — streamText pipes tokens to VAPI as they arrive ─────────
+  // This eliminates the pause: VAPI starts TTS on the first sentence
+  // while Claude is still generating the rest.
+  const id = 'chatcmpl-' + Date.now();
+  const encoder = new TextEncoder();
+
+  let result;
   try {
-    const result = await generateText({
+    result = streamText({
       model: anthropic('claude-haiku-4-5'),
       system: buildVoiceSystemPrompt(),
       messages: messages as Array<{ role: 'user' | 'assistant'; content: string }>,
-      maxOutputTokens: 120, // 1-2 sentences in Polish ≈ 60-100 tokens
+      maxOutputTokens: 200, // 2-3 sentences in Polish
       tools,
       stopWhen: stepCountIs(2),
     });
-    responseText = result.text;
   } catch (err) {
-    console.error('/api/voice Claude error:', err);
-    responseText =
-      'Przepraszam, mam chwilowy problem techniczny. Proszę spróbować ponownie.';
-  }
-
-  // ── Return OpenAI format — streaming SSE if requested, plain JSON otherwise ─
-  const id = 'chatcmpl-' + Date.now();
-
-  // VAPI sends stream:true by default — must respond with SSE
-  if (requestedStream) {
-    const encoder = new TextEncoder();
-    const stream = new ReadableStream({
+    console.error('/api/voice streamText init error:', err);
+    // Fall back to error message as single SSE chunk
+    const errorStream = new ReadableStream({
       start(controller) {
-        // Send content chunk
-        const chunk = {
-          id,
-          object: 'chat.completion.chunk',
-          choices: [
-            {
-              index: 0,
-              delta: { role: 'assistant', content: responseText },
-              finish_reason: null,
-            },
-          ],
-        };
+        const chunk = { id, object: 'chat.completion.chunk', choices: [{ index: 0, delta: { role: 'assistant', content: 'Przepraszam, mam chwilowy problem techniczny. Proszę spróbować ponownie.' }, finish_reason: null }] };
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(chunk)}\n\n`));
-
-        // Send finish chunk
-        const doneChunk = {
-          id,
-          object: 'chat.completion.chunk',
-          choices: [{ index: 0, delta: {}, finish_reason: 'stop' }],
-        };
-        controller.enqueue(encoder.encode(`data: ${JSON.stringify(doneChunk)}\n\n`));
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify({ id, object: 'chat.completion.chunk', choices: [{ index: 0, delta: {}, finish_reason: 'stop' }] })}\n\n`));
         controller.enqueue(encoder.encode('data: [DONE]\n\n'));
         controller.close();
       },
     });
-
-    return new Response(stream, {
-      headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        Connection: 'keep-alive',
-      },
-    });
+    return new Response(errorStream, { headers: { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache' } });
   }
 
-  return Response.json({
-    id,
-    object: 'chat.completion',
-    choices: [
-      {
-        index: 0,
-        message: { role: 'assistant', content: responseText },
-        finish_reason: 'stop',
-      },
-    ],
+  // Stream tokens to VAPI as SSE deltas — VAPI chunks by punctuation boundary
+  const stream = new ReadableStream({
+    async start(controller) {
+      try {
+        for await (const delta of result.textStream) {
+          const chunk = {
+            id,
+            object: 'chat.completion.chunk',
+            choices: [{ index: 0, delta: { content: delta }, finish_reason: null }],
+          };
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(chunk)}\n\n`));
+        }
+      } catch (err) {
+        console.error('/api/voice stream error:', err);
+        const errChunk = { id, object: 'chat.completion.chunk', choices: [{ index: 0, delta: { content: 'Przepraszam, wystąpił błąd.' }, finish_reason: null }] };
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify(errChunk)}\n\n`));
+      } finally {
+        const done = { id, object: 'chat.completion.chunk', choices: [{ index: 0, delta: {}, finish_reason: 'stop' }] };
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify(done)}\n\n`));
+        controller.enqueue(encoder.encode('data: [DONE]\n\n'));
+        controller.close();
+      }
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+    },
   });
 }
