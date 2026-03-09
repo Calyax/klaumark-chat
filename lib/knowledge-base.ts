@@ -204,4 +204,92 @@ export const FAQS: FAQ[] = [
       pl: 'Pakiet ECO Start zamykamy zwykle w ciągu jednego dnia roboczego. Złożone instalacje (COMFORT Plus) to kilka dni wraz z testami i szkoleniem.',
     },
   },
+  {
+    topic: 'sensor-offline',
+    q: {
+      en: 'My sensor shows as offline or not responding',
+      pl: 'Czujnik pokazuje się jako offline lub nie reaguje',
+    },
+    a: {
+      en: 'First check the battery — most sensors use CR2032 or AA batteries that last 1-2 years. If the battery is fine, move the sensor closer to the hub or a Zigbee repeater, then remove and re-add the device in the app.',
+      pl: 'Sprawdź najpierw baterię — większość czujników używa CR2032 lub AA, które wytrzymują 1-2 lata. Jeśli bateria jest OK, przesuń czujnik bliżej hub-a lub repeatera Zigbee, a następnie usuń urządzenie z aplikacji i sparuj je ponownie.',
+    },
+  },
+  {
+    topic: 'device-pairing',
+    q: {
+      en: 'My device won\'t pair or is not detected',
+      pl: 'Urządzenie nie chce się sparować lub nie jest wykrywane',
+    },
+    a: {
+      en: 'Put the hub in pairing mode first, then reset the device by holding its button for 5-10 seconds until the LED blinks fast. Make sure the device is within 2 meters of the hub during pairing.',
+      pl: 'Najpierw włącz tryb parowania w hub-ie, a następnie zresetuj urządzenie przytrzymując przycisk przez 5-10 sekund, aż dioda LED zacznie szybko migać. Podczas parowania trzymaj urządzenie w odległości do 2 metrów od hub-a.',
+    },
+  },
+  {
+    topic: 'zigbee-connectivity',
+    q: {
+      en: 'Zigbee devices keep dropping connection',
+      pl: 'Urządzenia Zigbee wypadają z sieci',
+    },
+    a: {
+      en: 'Zigbee signal is blocked by concrete walls and metal objects. Add a Zigbee repeater (any mains-powered Zigbee plug works as a repeater) midway between the hub and the problematic device.',
+      pl: 'Sygnał Zigbee jest blokowany przez ściany betonowe i metalowe elementy. Dodaj repeater Zigbee (każda gniazdkowa wtyczka Zigbee działa jako repeater) w połowie drogi między hub-em a problematycznym urządzeniem.',
+    },
+  },
+  {
+    topic: 'motion-sensor',
+    q: {
+      en: 'Motion sensor triggers too often or not at all',
+      pl: 'Czujnik ruchu wyzwala się za często lub wcale',
+    },
+    a: {
+      en: 'For false triggers: avoid pointing the sensor at windows, heating vents or fans. For no detection: check the sensitivity setting in the app and make sure pets or objects aren\'t blocking the field of view.',
+      pl: 'Przy fałszywych alarmach: nie kieruj czujnika na okna, grzejniki ani wentylatory. Przy braku wykrywania: sprawdź ustawienie czułości w aplikacji i upewnij się, że zwierzęta ani przedmioty nie zasłaniają pola widzenia czujnika.',
+    },
+  },
+  {
+    topic: 'smart-lock',
+    q: {
+      en: 'Smart lock not responding or won\'t lock remotely',
+      pl: 'Smart zamek nie reaguje lub nie blokuje się zdalnie',
+    },
+    a: {
+      en: 'Check the battery level first — smart locks drain batteries faster than other devices and need replacement every 3-6 months. Also check that the lock has a stable Zigbee or Wi-Fi connection in the app.',
+      pl: 'Sprawdź poziom baterii — smart zamki zużywają baterie szybciej niż inne urządzenia i wymagają wymiany co 3-6 miesięcy. Sprawdź też, czy zamek ma stabilne połączenie Zigbee lub Wi-Fi w aplikacji.',
+    },
+  },
+  {
+    topic: 'automation-not-working',
+    q: {
+      en: 'Automation or scene stopped working',
+      pl: 'Automatyzacja lub scena przestała działać',
+    },
+    a: {
+      en: 'Check if any of the trigger devices are offline (they\'ll show in the app). Also verify the automation is still enabled — app updates sometimes reset the toggle. If the problem persists, delete and recreate the automation.',
+      pl: 'Sprawdź, czy któreś z urządzeń wyzwalających nie jest offline (widać to w aplikacji). Zweryfikuj też, czy automatyzacja jest włączona — aktualizacje aplikacji czasem resetują przełącznik. Jeśli problem się utrzymuje, usuń i utwórz automatyzację od nowa.',
+    },
+  },
+  {
+    topic: 'thermostat',
+    q: {
+      en: 'Wi-Fi thermostat not reaching target temperature',
+      pl: 'Termostat Wi-Fi nie osiąga zadanej temperatury',
+    },
+    a: {
+      en: 'Make sure the thermostat is calibrated — there\'s an offset setting in the app if the reading is off by 1-2 degrees. Also check that the heating schedule matches your current mode (heating vs cooling).',
+      pl: 'Sprawdź kalibrację termostatu — w aplikacji jest ustawienie korekty temperatury jeśli wskazanie odbiega o 1-2 stopnie. Sprawdź też, czy harmonogram ogrzewania odpowiada aktualnemu trybowi pracy.',
+    },
+  },
+  {
+    topic: 'app-not-responding',
+    q: {
+      en: 'App is slow or devices not updating in real time',
+      pl: 'Aplikacja jest wolna lub urządzenia nie aktualizują się na bieżąco',
+    },
+    a: {
+      en: 'Force-close and reopen the app. If that doesn\'t help, check if the hub has an update available — firmware updates fix many connectivity issues. A hub restart (unplug for 10 seconds) also resolves most real-time sync problems.',
+      pl: 'Wymuś zamknięcie i ponowne otwarcie aplikacji. Jeśli to nie pomoże, sprawdź czy hub-a nie ma dostępnej aktualizacji firmware — nowe wersje naprawiają wiele problemów. Restart hub-a (odłącz na 10 sekund) rozwiązuje większość problemów z synchronizacją.',
+    },
+  },
 ];

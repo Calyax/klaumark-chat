@@ -276,6 +276,54 @@
     "text": "Kontakt z Klaumark:\nEmail: admin@klaumark.com\nTelefon: +48 573 473 042\nOpis: Skontaktuj się z naszymi ekspertami smart home. Jesteśmy tutaj, aby odpowiedzieć na Twoje pytania, zapewnić konsultację i pomóc przekształcić Twój dom w inteligentną, energooszczędną przestrzeń.\nMożesz też wysłać wiadomość przez formularz kontaktowy na klaumark.com. Dostępne tematy: Wycena, Pytanie, Prezentacja, Inny."
   },
   {
+    "id": "troubleshoot-pl-sensor-offline",
+    "lang": "pl",
+    "topic": "troubleshooting",
+    "text": "Problem: Czujnik offline lub nie reaguje\nRozwiązanie: Sprawdź baterię — większość czujników używa CR2032 lub AA, wytrzymują 1-2 lata. Jeśli bateria OK, przesuń czujnik bliżej hub-a lub repeatera Zigbee, a następnie usuń i sparuj urządzenie ponownie w aplikacji."
+  },
+  {
+    "id": "troubleshoot-pl-device-pairing",
+    "lang": "pl",
+    "topic": "troubleshooting",
+    "text": "Problem: Urządzenie nie paruje się lub nie jest wykrywane\nRozwiązanie: Włącz tryb parowania w hub-ie, a następnie zresetuj urządzenie przytrzymując przycisk przez 5-10 sekund aż LED zacznie szybko migać. Podczas parowania trzymaj urządzenie do 2 metrów od hub-a."
+  },
+  {
+    "id": "troubleshoot-pl-zigbee",
+    "lang": "pl",
+    "topic": "troubleshooting",
+    "text": "Problem: Urządzenia Zigbee wypadają z sieci\nRozwiązanie: Sygnał Zigbee jest blokowany przez beton i metal. Dodaj repeater Zigbee (każda gniazdkowa wtyczka Zigbee działa jako repeater) w połowie drogi między hub-em a problematycznym urządzeniem."
+  },
+  {
+    "id": "troubleshoot-pl-motion-sensor",
+    "lang": "pl",
+    "topic": "troubleshooting",
+    "text": "Problem: Czujnik ruchu wyzwala się za często lub wcale nie reaguje\nRozwiązanie: Przy fałszywych alarmach nie kieruj czujnika na okna ani grzejniki. Przy braku wykrywania sprawdź czułość w aplikacji i upewnij się, że nic nie zasłania pola widzenia czujnika."
+  },
+  {
+    "id": "troubleshoot-pl-smart-lock",
+    "lang": "pl",
+    "topic": "troubleshooting",
+    "text": "Problem: Smart zamek nie reaguje lub nie blokuje zdalnie\nRozwiązanie: Sprawdź poziom baterii — smart zamki zużywają baterie szybciej, wymagają wymiany co 3-6 miesięcy. Sprawdź też połączenie Zigbee lub Wi-Fi zamka w aplikacji."
+  },
+  {
+    "id": "troubleshoot-pl-automation",
+    "lang": "pl",
+    "topic": "troubleshooting",
+    "text": "Problem: Automatyzacja lub scena przestała działać\nRozwiązanie: Sprawdź czy urządzenia wyzwalające nie są offline w aplikacji. Sprawdź czy automatyzacja jest włączona — aktualizacje aplikacji czasem resetują przełącznik. Jeśli problem trwa, usuń i utwórz automatyzację od nowa."
+  },
+  {
+    "id": "troubleshoot-pl-thermostat",
+    "lang": "pl",
+    "topic": "troubleshooting",
+    "text": "Problem: Termostat Wi-Fi nie osiąga zadanej temperatury\nRozwiązanie: Sprawdź kalibrację — w aplikacji jest korekta temperatury jeśli wskazanie odbiega o 1-2 stopnie. Sprawdź czy harmonogram odpowiada aktualnemu trybowi pracy (ogrzewanie lub chłodzenie)."
+  },
+  {
+    "id": "troubleshoot-pl-app",
+    "lang": "pl",
+    "topic": "troubleshooting",
+    "text": "Problem: Aplikacja wolna lub urządzenia nie aktualizują się\nRozwiązanie: Wymuś zamknięcie i ponowne otwarcie aplikacji. Sprawdź aktualizacje firmware hub-a. Restart hub-a (odłącz na 10 sekund) rozwiązuje większość problemów z synchronizacją."
+  },
+  {
     "id": "hero-en",
     "lang": "en",
     "topic": "hero",

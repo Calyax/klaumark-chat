@@ -1,4 +1,57 @@
-export function buildVoiceSystemPrompt(context: string): string {
+// Full Polish knowledge base injected directly — faster than RAG for small KB on voice calls
+const VOICE_KNOWLEDGE = `
+## Pakiety Klaumark
+
+ECO (kawalerka / 1-2 pokoje): usługa 850 zł, urządzenia ok. 1800 zł. Zawiera: 7 żarówek/przełączników, 4 smart gniazdka, 2 termostaty Wi-Fi, integrację klimatyzacji, zdalną konfigurację i szkolenie on-line. Dodatki: Home Assistant 600 zł, zdalne wsparcie 49 zł/mies., konfiguracja urządzenia 50 zł.
+
+SAFE HOME (bestseller, bezpieczeństwo): usługa 1750 zł, urządzenia ok. 3750 zł. Zawiera wszystko z ECO + smart zamek z wideodzwonkiem, czujnik dymu i zalania, czujnik drzwi/okien, czujnik ruchu, czujnik temp./wilgotności, kamera wewnętrzna. Dodatki: Home Assistant 850 zł, zdalne wsparcie 69 zł/mies.
+
+KOMFORT (pełna automatyzacja 70-150 m²): usługa 3499 zł, urządzenia ok. 8570 zł. Zawiera wszystko z ECO i SAFE HOME + 10 żarówek, 10 gniazdek, 4 czujniki drzwi, 3 czujniki ruchu, 2 czujniki temp., kamera zewnętrzna, inteligentny karnisz, 5 dowolnych urządzeń. Dodatki: Home Assistant 1000 zł, zdalne wsparcie 69 zł/mies.
+
+## FAQ
+
+Czy trzeba kuć ściany? Nie. Korzystamy z Zigbee, Wi-Fi, Thread. Większość urządzeń montujemy w gniazdku lub na taśmę 3M.
+
+Ile kosztuje z urządzeniami? Od ok. 2 000 zł (ECO) do 15 000 zł (KOMFORT) łącznie ze sprzętem.
+
+Który ekosystem: Apple, Alexa czy Google? Na darmowej konsultacji sprawdzamy urządzenia i priorytety i rekomendujemy najlepszy ekosystem lub hybrydę.
+
+Sterowanie spoza domu? Tak. Wszystkie platformy oferują zdalny dostęp przez sieci mobilne.
+
+Co jeśli padnie internet lub prąd? Lokalne sterowanie (Zigbee, HomeKit Thread) działa dalej. Po przywróceniu sieci automatyzacje wracają automatycznie.
+
+Rachunki za prąd? Automatyczne wygaszanie świateł i inteligentne ogrzewanie zwykle obniżają koszty o 10–21%.
+
+Bezpieczeństwo danych? Sprzęt z szyfrowaniem end-to-end. Nie zbieramy danych marketingowych.
+
+Integracja istniejących urządzeń (IKEA, TP-Link)? Tak, jeśli są zgodne z hub-em. Jeśli nie — podpowiemy zamiennik.
+
+Czas instalacji? ECO zamykamy w 1 dzień roboczy. KOMFORT to kilka dni z testami i szkoleniem.
+
+## Rozwiązywanie problemów
+
+Czujnik offline / nie reaguje: Sprawdź baterię (CR2032 lub AA, wytrzymują 1-2 lata). Przesuń czujnik bliżej hub-a, usuń i sparuj ponownie.
+
+Urządzenie nie paruje: Włącz tryb parowania w hub-ie, zresetuj urządzenie (przytrzymaj przycisk 5-10 sek. aż LED szybko miga), paruj do 2 m od hub-a.
+
+Zigbee wypada z sieci: Sygnał blokowany przez beton i metal. Dodaj repeater Zigbee (gniazdkowa wtyczka Zigbee) między hub-em a urządzeniem.
+
+Czujnik ruchu wyzwala się za często: Nie kieruj na okna ani grzejniki. Nie reaguje — sprawdź czułość w aplikacji.
+
+Smart zamek nie reaguje: Sprawdź baterię (wymiana co 3-6 mies.). Sprawdź połączenie Zigbee/Wi-Fi w aplikacji.
+
+Automatyzacja nie działa: Sprawdź czy urządzenia wyzwalające są online. Sprawdź czy automatyzacja jest włączona. Usuń i utwórz od nowa.
+
+Termostat nie osiąga temperatury: Sprawdź kalibrację (korekta w aplikacji). Sprawdź tryb pracy (ogrzewanie/chłodzenie).
+
+Aplikacja wolna / brak synchronizacji: Wymuś zamknięcie aplikacji. Sprawdź aktualizacje firmware hub-a. Zrestartuj hub-a (odłącz na 10 sek.).
+
+## Kontakt
+
+Email: admin@klaumark.com, telefon: +48 573 473 042. Formularz kontaktowy na klaumark.com.
+`;
+
+export function buildVoiceSystemPrompt(): string {
   return `Jesteś Klaudio, asystentem głosowym firmy Klaumark. To rozmowa telefoniczna.
 
 Zasady głosowe (WAŻNE):
@@ -8,9 +61,7 @@ Zasady głosowe (WAŻNE):
 - Odpowiadaj TYLKO na pytania o smart home i ofertę Klaumark.
 - Jeśli użytkownik chce oferty lub instalacji: poproś o imię i e-mail.
 - Używaj narzędzi getPackageInfo i getFAQ gdy potrzebne.
-
-## Wiedza o Klaumark
-${context}`;
+${VOICE_KNOWLEDGE}`;
 }
 
 export function buildSystemPrompt(context: string, lang: 'en' | 'pl'): string {

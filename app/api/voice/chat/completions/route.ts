@@ -58,7 +58,6 @@ import { NextRequest } from 'next/server';
 import { anthropic } from '@ai-sdk/anthropic';
 import { generateText, tool, zodSchema, stepCountIs } from 'ai';
 import { z } from 'zod';
-import { findRelevantContent } from '@/lib/upstash';
 import { buildVoiceSystemPrompt } from '@/lib/system-prompt';
 import { PACKAGES, FAQS } from '@/lib/knowledge-base';
 
@@ -99,16 +98,6 @@ export async function POST(req: NextRequest) {
     requestedStream = parsed.data.stream === true;
   } catch {
     return new Response('Bad Request', { status: 400 });
-  }
-
-  // ── RAG on last user message (phone = always Polish) ─────────────────────
-  const lastUserMsg =
-    [...messages].reverse().find((m) => m.role === 'user')?.content ?? '';
-  let context = '';
-  try {
-    context = await findRelevantContent(lastUserMsg, 'pl');
-  } catch (err) {
-    console.error('Upstash query failed for /api/voice:', err);
   }
 
   // ── Tools ─────────────────────────────────────────────────────────────────
@@ -184,11 +173,11 @@ export async function POST(req: NextRequest) {
   try {
     const result = await generateText({
       model: anthropic('claude-haiku-4-5'),
-      system: buildVoiceSystemPrompt(context),
+      system: buildVoiceSystemPrompt(),
       messages: messages as Array<{ role: 'user' | 'assistant'; content: string }>,
-      maxOutputTokens: 300, // phone responses must be concise
+      maxOutputTokens: 120, // 1-2 sentences in Polish ≈ 60-100 tokens
       tools,
-      stopWhen: stepCountIs(5),
+      stopWhen: stepCountIs(2),
     });
     responseText = result.text;
   } catch (err) {
