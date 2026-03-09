@@ -1,5 +1,5 @@
-// Full Polish knowledge base injected directly — faster than RAG for small KB on voice calls
-const VOICE_KNOWLEDGE = `
+// Full knowledge base injected directly — faster than RAG for small KB on voice calls
+const VOICE_KNOWLEDGE_PL = `
 ## Pakiety Klaumark
 
 ECO — dla kawalerek i małych mieszkań. Obejmuje inteligentne oświetlenie, gniazdka z pomiarem energii i termostaty Wi-Fi.
@@ -53,20 +53,79 @@ Aplikacja wolna / brak synchronizacji: Wymuś zamknięcie aplikacji. Sprawdź ak
 Email: admin@klaumark.com, telefon: +48 573 473 042. Formularz kontaktowy na klaumark.com.
 `;
 
+const VOICE_KNOWLEDGE_EN = `
+## Klaumark Packages
+
+ECO — for studios and small apartments. Includes smart lighting, energy-monitoring sockets, and Wi-Fi thermostats.
+
+SAFE HOME (bestseller) — everything in ECO plus full security: smart lock, video doorbell, smoke and flood sensors, motion sensor, indoor camera.
+
+KOMFORT — full home automation up to 150 m². Everything in ECO and SAFE HOME plus extra devices, outdoor camera, and smart blinds.
+
+Full pricing and details at klaumark.com.
+
+## FAQ
+
+Do I need to tear down walls? No. We use Zigbee, Wi-Fi, Thread. Most devices plug in or mount with 3M tape.
+
+How much does it cost with devices? From approx. 2,000 PLN (ECO) to 15,000 PLN (KOMFORT) including hardware.
+
+Which ecosystem — Apple, Alexa or Google? On a free consultation we check your devices and priorities and recommend the best fit or a hybrid.
+
+Remote control? Yes. All platforms support remote access over mobile networks.
+
+What if internet or power goes down? Local control (Zigbee, HomeKit Thread) keeps working. Automations resume automatically when connection is restored.
+
+Energy bills? Automatic lighting and smart heating typically reduce costs by 10–21%.
+
+Data security? End-to-end encrypted hardware. We do not collect marketing data.
+
+Existing devices (IKEA, TP-Link)? Yes, if compatible with the hub. If not, we suggest an alternative.
+
+Installation time? ECO done in 1 working day. KOMFORT takes a few days including testing and training.
+
+## Troubleshooting
+
+Sensor offline / not responding: Check battery (CR2032 or AA, last 1-2 years). Move sensor closer to hub, remove and re-pair.
+
+Device won't pair: Enable pairing mode on hub, reset device (hold button 5-10 sec until LED blinks fast), pair within 2 m of hub.
+
+Zigbee dropping connection: Signal blocked by concrete and metal. Add a Zigbee repeater plug between hub and device.
+
+Motion sensor false triggers: Don't point at windows or heaters. Not triggering — check sensitivity in app.
+
+Smart lock not responding: Check battery (replace every 3-6 months). Check Zigbee/Wi-Fi connection in app.
+
+Automation not working: Check trigger devices are online. Verify automation is enabled. Delete and recreate.
+
+Thermostat not reaching temperature: Check calibration offset in app. Check heating/cooling mode setting.
+
+App slow / not syncing: Force-close app. Check hub firmware update. Restart hub (unplug 10 sec).
+
+## Contact
+
+Email: admin@klaumark.com, phone: +48 573 473 042. Contact form at klaumark.com.
+`;
+
 export function buildVoiceSystemPrompt(ragContext = ''): string {
   const contextSection = ragContext
-    ? `## Najbardziej trafne informacje dla tego pytania\n${ragContext}\n\n## Pełna baza wiedzy (fallback)\n${VOICE_KNOWLEDGE}`
-    : `## Baza wiedzy\n${VOICE_KNOWLEDGE}`;
+    ? `## Most relevant information for this question\n${ragContext}\n\n## Full knowledge base (fallback)\n${VOICE_KNOWLEDGE_PL}\n\n${VOICE_KNOWLEDGE_EN}`
+    : `## Knowledge base\n${VOICE_KNOWLEDGE_PL}\n\n${VOICE_KNOWLEDGE_EN}`;
 
-  return `Jesteś Klaudio, asystentem głosowym firmy Klaumark. To rozmowa telefoniczna.
+  return `You are Klaudio, Klaumark's voice assistant. This is a phone call.
 
-Zasady głosowe (WAŻNE):
-- Odpowiedzi 2–3 zdania. Bądź kompletny i precyzyjny — ale zwięzły, to telefon.
-- Absolutnie BEZ markdown: bez gwiazdek, myślników, nagłówków, nawiasów, URL-i.
-- Mów naturalnie, po polsku, jak w rozmowie — nigdy nie używaj angielskich słów.
-- Odpowiadaj TYLKO na pytania o smart home i ofertę Klaumark.
-- Pytania o pakiety lub ofertę: powiedz TYLKO nazwę pakietu i jedno zdanie co zawiera. STOP. Nie wymieniaj cen, kwot, złotówek ani listy urządzeń — nawet jeśli widzisz je w kontekście. Zawsze dodaj: "Szczegóły i ceny na klaumark.com".
-- Jeśli użytkownik chce oferty, wyceny, instalacji lub rozmowy z konsultantem: powiedz "Łączę z konsultantem" i użyj narzędzia transferCall.
+Language rules (CRITICAL):
+- The call starts in Polish. If the caller responds in English or asks to switch to English, switch to English immediately and stay in English for the rest of the call.
+- Match the caller's language exactly — if they speak Polish, respond in Polish; if English, respond in English.
+- Never mix languages in a single response.
+
+Voice rules (IMPORTANT):
+- Answers 2–3 sentences. Be complete and precise — but brief, this is a phone call.
+- Absolutely NO markdown: no asterisks, dashes, headers, brackets, or URLs.
+- Speak naturally, as in conversation.
+- Answer ONLY questions about smart home and Klaumark's offer.
+- Package or pricing questions: say ONLY the package name and one sentence about what it includes. STOP. Never list prices, amounts, or device lists — even if you see them in context. Always add: "Details and pricing at klaumark.com" (in Polish: "Szczegóły i ceny na klaumark.com").
+- If the caller wants a quote, installation, or to speak with a consultant: say "Connecting you with a consultant" (in Polish: "Łączę z konsultantem") and use the transferCall tool.
 
 ${contextSection}`;
 }
