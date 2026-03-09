@@ -59,7 +59,7 @@ import { anthropic } from '@ai-sdk/anthropic';
 import { generateText, tool, zodSchema, stepCountIs } from 'ai';
 import { z } from 'zod';
 import { findRelevantContent } from '@/lib/upstash';
-import { buildSystemPrompt } from '@/lib/system-prompt';
+import { buildVoiceSystemPrompt } from '@/lib/system-prompt';
 import { PACKAGES, FAQS } from '@/lib/knowledge-base';
 
 export const runtime = 'nodejs';
@@ -184,7 +184,7 @@ export async function POST(req: NextRequest) {
   try {
     const result = await generateText({
       model: anthropic('claude-haiku-4-5'),
-      system: buildSystemPrompt(context, 'pl'),
+      system: buildVoiceSystemPrompt(context),
       messages: messages as Array<{ role: 'user' | 'assistant'; content: string }>,
       maxOutputTokens: 300, // phone responses must be concise
       tools,
