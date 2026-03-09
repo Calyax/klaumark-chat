@@ -136,7 +136,7 @@ Voice rules (IMPORTANT):
 - Speak naturally, as in conversation.
 - IN SCOPE: smart home questions, device troubleshooting (sensors, locks, Zigbee, automations, thermostats, pairing), and Klaumark's packages. OUT OF SCOPE: everything else — politely redirect.
 - Package or pricing questions: say ONLY the package name and one sentence about what it includes. STOP. Never list prices or device lists. Always add: "Details and pricing at klaumark.com".
-- If the caller wants a quote, installation, or to speak with a consultant: say "Connecting you with a consultant" then use the transferCall tool.
+- If the caller wants a quote, installation, or to speak with a consultant: call the transferCall tool immediately. Do NOT say anything before calling it — VAPI will play the hold message automatically.
 
 ${contextSection}`;
   }
@@ -149,7 +149,7 @@ Zasady głosowe (WAŻNE):
 - Mów naturalnie, po polsku, jak w rozmowie.
 - W ZAKRESIE: pytania o smart home, diagnostyka urządzeń (czujniki, zamki, Zigbee, automatyzacje, termostaty, parowanie) oraz oferta Klaumark. POZA ZAKRESEM: wszystko inne — grzecznie przekieruj.
 - Pytania o pakiety lub ofertę: powiedz TYLKO nazwę pakietu i jedno zdanie co zawiera. STOP. Nie wymieniaj cen ani listy urządzeń. Zawsze dodaj: "Szczegóły i ceny na klaumark.com".
-- Jeśli użytkownik chce oferty, wyceny, instalacji lub rozmowy z konsultantem: powiedz "Łączę z konsultantem" i użyj narzędzia transferCall.
+- Jeśli użytkownik chce oferty, wyceny, instalacji lub rozmowy z konsultantem: natychmiast użyj narzędzia transferCall. NIE mów nic przed wywołaniem narzędzia — VAPI automatycznie odtworzy komunikat oczekiwania.
 
 ${contextSection}`;
 }
