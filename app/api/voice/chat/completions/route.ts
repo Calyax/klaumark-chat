@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
       model: anthropic('claude-sonnet-4-5'),
       system: buildVoiceSystemPrompt(ragContext),
       messages: messages as Array<{ role: 'user' | 'assistant'; content: string }>,
-      maxOutputTokens: 300, // full KB in system prompt — no tools needed, answers directly
+      maxOutputTokens: 150, // hard cap — phone answers must be 2-3 sentences max
     });
   } catch (err) {
     console.error('/api/voice streamText init error:', err);
