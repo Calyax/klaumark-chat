@@ -56,10 +56,9 @@
 
 import { NextRequest } from 'next/server';
 import { anthropic } from '@ai-sdk/anthropic';
-import { streamText, tool, zodSchema, stepCountIs } from 'ai';
+import { streamText } from 'ai';
 import { z } from 'zod';
 import { buildVoiceSystemPrompt } from '@/lib/system-prompt';
-import { PACKAGES, FAQS } from '@/lib/knowledge-base';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60; // phone call turn — 60s ample
@@ -100,74 +99,6 @@ export async function POST(req: NextRequest) {
     return new Response('Bad Request', { status: 400 });
   }
 
-  // ── Tools ─────────────────────────────────────────────────────────────────
-  const tools = {
-    getPackageInfo: tool({
-      description:
-        'Returns pricing and features for a specific Klaumark smart home package.',
-      inputSchema: zodSchema(
-        z.object({
-          packageName: z
-            .string()
-            .describe('Package name, e.g. "eco", "safe", "komfort"'),
-        }),
-      ),
-      execute: async (input) => {
-        const normalized = input.packageName.toLowerCase();
-        const pkg = PACKAGES.find(
-          (p) =>
-            p.names.pl.toLowerCase().includes(normalized) ||
-            p.names.en.toLowerCase().includes(normalized) ||
-            p.id.includes(normalized),
-        );
-        if (!pkg) {
-          return {
-            found: false,
-            message: `Nie znaleziono pakietu "${input.packageName}".`,
-          };
-        }
-        return {
-          found: true,
-          id: pkg.id,
-          name: pkg.names.pl,
-          servicePrice: pkg.servicePrice,
-          devicesPrice: pkg.devicesPrice,
-          advantages: pkg.advantages.pl,
-        };
-      },
-    }),
-    getFAQ: tool({
-      description: 'Returns a specific FAQ answer by topic keyword.',
-      inputSchema: zodSchema(
-        z.object({
-          topic: z
-            .string()
-            .describe(
-              'Topic keyword, e.g. "installation", "cost", "ecosystem"',
-            ),
-        }),
-      ),
-      execute: async (input) => {
-        const normalized = input.topic.toLowerCase();
-        const faq = FAQS.find((f) =>
-          f.topic.toLowerCase().includes(normalized),
-        );
-        if (!faq) {
-          return {
-            found: false,
-            message: `Nie znaleziono FAQ dla tematu "${input.topic}".`,
-          };
-        }
-        return {
-          found: true,
-          topic: faq.topic,
-          question: faq.q.pl,
-          answer: faq.a.pl,
-        };
-      },
-    }),
-  };
-
   // ── Call Claude — streamText pipes tokens to VAPI as they arrive ─────────
   // This eliminates the pause: VAPI starts TTS on the first sentence
   // while Claude is still generating the rest.
@@ -180,9 +111,7 @@ export async function POST(req: NextRequest) {
       model: anthropic('claude-haiku-4-5'),
       system: buildVoiceSystemPrompt(),
       messages: messages as Array<{ role: 'user' | 'assistant'; content: string }>,
-      maxOutputTokens: 200, // 2-3 sentences in Polish
-      tools,
-      stopWhen: stepCountIs(2),
+      maxOutputTokens: 300, // full KB in system prompt — no tools needed, answers directly
     });
   } catch (err) {
     console.error('/api/voice streamText init error:', err);
