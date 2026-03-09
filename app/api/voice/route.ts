@@ -81,7 +81,7 @@ const VapiBodySchema = z.object({
 export async function POST(req: NextRequest) {
   // ── Auth: VAPI webhook secret ─────────────────────────────────────────────
   const secret = req.headers.get('x-vapi-secret');
-  if (!secret || secret !== process.env.VAPI_WEBHOOK_SECRET) {
+  if (process.env.VAPI_WEBHOOK_SECRET && secret !== process.env.VAPI_WEBHOOK_SECRET) {
     return new Response('Unauthorized', { status: 401 });
   }
 
