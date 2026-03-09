@@ -87,6 +87,7 @@ export async function POST(req: NextRequest) {
 
   // ── Parse body ────────────────────────────────────────────────────────────
   let messages: z.infer<typeof VapiMessageSchema>[];
+  let requestedStream = false;
   try {
     const raw = await req.json();
     const parsed = VapiBodySchema.safeParse(raw);
@@ -95,6 +96,7 @@ export async function POST(req: NextRequest) {
     }
     // Filter out 'system' role — we supply our own system prompt
     messages = parsed.data.messages.filter((m) => m.role !== 'system');
+    requestedStream = parsed.data.stream === true;
   } catch {
     return new Response('Bad Request', { status: 400 });
   }
@@ -195,9 +197,51 @@ export async function POST(req: NextRequest) {
       'Przepraszam, mam chwilowy problem techniczny. Proszę spróbować ponownie.';
   }
 
-  // ── Return OpenAI chat completions format ─────────────────────────────────
+  // ── Return OpenAI format — streaming SSE if requested, plain JSON otherwise ─
+  const id = 'chatcmpl-' + Date.now();
+
+  // VAPI sends stream:true by default — must respond with SSE
+  if (requestedStream) {
+    const encoder = new TextEncoder();
+    const stream = new ReadableStream({
+      start(controller) {
+        // Send content chunk
+        const chunk = {
+          id,
+          object: 'chat.completion.chunk',
+          choices: [
+            {
+              index: 0,
+              delta: { role: 'assistant', content: responseText },
+              finish_reason: null,
+            },
+          ],
+        };
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify(chunk)}\n\n`));
+
+        // Send finish chunk
+        const doneChunk = {
+          id,
+          object: 'chat.completion.chunk',
+          choices: [{ index: 0, delta: {}, finish_reason: 'stop' }],
+        };
+        controller.enqueue(encoder.encode(`data: ${JSON.stringify(doneChunk)}\n\n`));
+        controller.enqueue(encoder.encode('data: [DONE]\n\n'));
+        controller.close();
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        Connection: 'keep-alive',
+      },
+    });
+  }
+
   return Response.json({
-    id: 'chatcmpl-' + Date.now(),
+    id,
     object: 'chat.completion',
     choices: [
       {
