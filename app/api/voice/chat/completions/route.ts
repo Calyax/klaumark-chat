@@ -59,7 +59,7 @@ import { anthropic } from '@ai-sdk/anthropic';
 import { streamText, tool } from 'ai';
 import { z } from 'zod';
 import { findRelevantContent } from '@/lib/upstash';
-import { buildVoiceSystemPrompt } from '@/lib/system-prompt';
+import { buildVoiceSystemPrompt, detectCallLanguage } from '@/lib/system-prompt';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60; // phone call turn — 60s ample
@@ -100,12 +100,15 @@ export async function POST(req: NextRequest) {
     return new Response('Bad Request', { status: 400 });
   }
 
-  // ── RAG with timeout — fall back to inline KB if Upstash is slow ─────────
+  // ── Detect language from conversation history ─────────────────────────────
+  const lang = detectCallLanguage(messages);
   const lastUserMsg = [...messages].reverse().find((m) => m.role === 'user')?.content ?? '';
+
+  // ── RAG with timeout — fall back to inline KB if Upstash is slow ─────────
   let ragContext = '';
   try {
     ragContext = await Promise.race([
-      findRelevantContent(lastUserMsg, 'pl'),
+      findRelevantContent(lastUserMsg, lang),
       new Promise<string>((_, reject) => setTimeout(() => reject(new Error('timeout')), 1500)),
     ]);
   } catch {
@@ -120,7 +123,7 @@ export async function POST(req: NextRequest) {
   try {
     result = streamText({
       model: anthropic('claude-sonnet-4-5'),
-      system: buildVoiceSystemPrompt(ragContext),
+      system: buildVoiceSystemPrompt(ragContext, lang),
       messages: messages as Array<{ role: 'user' | 'assistant'; content: string }>,
       maxOutputTokens: 150, // hard cap — phone answers must be 2-3 sentences max
       tools: {
