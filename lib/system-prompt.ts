@@ -112,10 +112,12 @@ export function detectCallLanguage(messages: Array<{ role: string; content: stri
     .filter((m) => m.role === 'user')
     .map((m) => m.content)
     .join(' ');
-  // Polish diacritics are a strong signal — if present, caller is Polish
-  if (/[ąęóśźżćńłĄĘÓŚŹŻĆŃŁ]/.test(userText)) return 'pl';
-  // Common English words — if present without Polish chars, caller is English
-  if (/\b(the|is|are|have|want|need|can|please|hello|hi|yes|no|what|how|why|i|my|your|would|could|speak|english|help|smart|home)\b/i.test(userText)) return 'en';
+  // Count Polish diacritics — require at least 3 to be confident (Deepgram PL model can
+  // occasionally add 1-2 diacritics when transcribing English speech)
+  const polishCharCount = (userText.match(/[ąęóśźżćńłĄĘÓŚŹŻĆŃŁ]/g) ?? []).length;
+  if (polishCharCount >= 3) return 'pl';
+  // Common English words — if present, caller is English
+  if (/\b(the|is|are|have|want|need|can|please|hello|hi|yes|no|what|how|why|i|my|your|would|could|speak|english|help|smart|home|connect|transfer|consultant)\b/i.test(userText)) return 'en';
   return 'pl'; // default
 }
 
