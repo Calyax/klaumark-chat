@@ -50,7 +50,7 @@ Aplikacja wolna / brak synchronizacji: Wymuś zamknięcie aplikacji. Sprawdź ak
 
 ## Kontakt
 
-Email: admin@klaumark.com, telefon: +48 573 473 042. Formularz kontaktowy na klaumark.com.
+Email: admin@klaumark.com, telefon: +48 732 096 896. Formularz kontaktowy na klaumark.com.
 `;
 
 const VOICE_KNOWLEDGE_EN = `
@@ -104,7 +104,7 @@ App slow / not syncing: Force-close app. Check hub firmware update. Restart hub 
 
 ## Contact
 
-Email: admin@klaumark.com, phone: +48 573 473 042. Contact form at klaumark.com.
+Email: admin@klaumark.com, phone: +48 732 096 896. Contact form at klaumark.com.
 `;
 
 export function detectCallLanguage(messages: Array<{ role: string; content: string }>): 'pl' | 'en' {
